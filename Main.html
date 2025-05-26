@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List with User Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background: #f5f5f5;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+    }
+    .task-input, .user-auth {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .task-input input, .user-auth input {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+    }
+    .task-input button, .user-auth button {
+      padding: 10px 15px;
+      font-size: 16px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      padding: 10px;
+      background: #eee;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      border-radius: 5px;
+    }
+    li.completed {
+      text-decoration: line-through;
+      background-color: #c8e6c9;
+    }
+    .checkbox {
+      margin-right: 10px;
+    }
+    .progress-container {
+      margin-top: 20px;
+    }
+    .progress-bar {
+      height: 25px;
+      background: #ddd;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      background: #4caf50;
+      text-align: center;
+      line-height: 25px;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>To-Do List</h2>
+
+    <div class="user-auth">
+      <input type="text" id="username" placeholder="Enter username">
+      <button onclick="registerUser()">Register</button>
+      <button onclick="loginUser()">Login</button>
+    </div>
+
+    <div class="task-input">
+      <input type="text" id="newTask" placeholder="Enter a new task">
+      <button onclick="addTask()">Add</button>
+    </div>
+
+    <ul id="taskList"></ul>
+
+    <div class="progress-container">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill">0%</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let tasks = [];
+    let currentUser = null;
+
+    function registerUser() {
+      const username = document.getElementById('username').value.trim();
+      if (!username) return alert('Please enter a username to register.');
+
+      if (!localStorage.getItem('users')) {
+        localStorage.setItem('users', JSON.stringify({}));
+      }
+
+      const users = JSON.parse(localStorage.getItem('users'));
+
+      if (users[username]) {
+        alert('Username already exists. Try logging in.');
+        return;
+      }
+
+      users[username] = [];
+      localStorage.setItem('users', JSON.stringify(users));
+      alert('User registered successfully! Now login.');
+    }
+
+    function loginUser() {
+      const username = document.getElementById('username').value.trim();
+      if (!username) return alert('Please enter a username to login.');
+
+      const users = JSON.parse(localStorage.getItem('users') || '{}');
+
+      if (!users[username]) {
+        alert('User not found. Please register first.');
+        return;
+      }
+
+      currentUser = username;
+      tasks = users[username];
+      renderTasks();
+    }
+
+    function addTask() {
+      if (!currentUser) return alert('Please login to add tasks.');
+
+      const taskText = document.getElementById('newTask').value.trim();
+      if (taskText === '') return;
+
+      tasks.push({ text: taskText, completed: false });
+      document.getElementById('newTask').value = '';
+      saveUserData();
+      renderTasks();
+    }
+
+    function toggleTask(index) {
+      tasks[index].completed = !tasks[index].completed;
+      saveUserData();
+      renderTasks();
+    }
+
+    function renderTasks() {
+      const taskList = document.getElementById('taskList');
+      taskList.innerHTML = '';
+
+      tasks.forEach((task, index) => {
+        const li = document.createElement('li');
+        li.className = task.completed ? 'completed' : '';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'checkbox';
+        checkbox.checked = task.completed;
+        checkbox.onclick = () => toggleTask(index);
+
+        const tick = document.createElement('span');
+        tick.innerHTML = task.completed ? '✅' : '';
+        tick.style.marginLeft = 'auto';
+
+        li.appendChild(checkbox);
+        li.appendChild(document.createTextNode(task.text));
+        li.appendChild(tick);
+        taskList.appendChild(li);
+      });
+
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const total = tasks.length;
+      const completed = tasks.filter(t => t.completed).length;
+      const percentage = total === 0 ? 0 : Math.round((completed / total) * 100);
+      const progressFill = document.getElementById('progressFill');
+      progressFill.style.width = percentage + '%';
+      progressFill.innerText = percentage + '%';
+    }
+
+    function saveUserData() {
+      const users = JSON.parse(localStorage.getItem('users'));
+      users[currentUser] = tasks;
+      localStorage.setItem('users', JSON.stringify(users));
+    }
+  </script>
+</body>
+</html>
