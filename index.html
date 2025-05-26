@@ -6,20 +6,23 @@
   <title>To-Do List with User Login</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 30px;
-      background: #f5f5f5;
+      background: #f0f2f5;
+      color: #333;
     }
     .container {
       max-width: 600px;
       margin: auto;
-      background: white;
+      background: #ffffff;
       padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
     h2 {
       text-align: center;
+      color: #3f51b5;
+      font-weight: bold;
     }
     .task-input, .user-auth {
       display: flex;
@@ -28,10 +31,30 @@
     }
     .task-input input, .user-auth input {
       flex: 1;
-      padding: 10px;
+      padding: 12px;
       font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
     }
-    .task-input button, .user-auth button {
+    .task-input button {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+    }
+    .user-auth button:nth-child(2) {
+      background-color: #2196f3;
+      color: white;
+      border: none;
+      border-radius: 6px;
+    }
+    .user-auth button:nth-child(3) {
+      background-color: #673ab7;
+      color: white;
+      border: none;
+      border-radius: 6px;
+    }
+    button {
       padding: 10px 15px;
       font-size: 16px;
       margin-left: 10px;
@@ -43,15 +66,17 @@
     }
     li {
       padding: 10px;
-      background: #eee;
+      background: #f9f9f9;
       margin-bottom: 10px;
       display: flex;
       align-items: center;
+      border-left: 5px solid #2196f3;
       border-radius: 5px;
     }
     li.completed {
       text-decoration: line-through;
       background-color: #c8e6c9;
+      border-left-color: #4caf50;
     }
     .checkbox {
       margin-right: 10px;
@@ -72,12 +97,21 @@
       text-align: center;
       line-height: 25px;
       color: white;
+      font-weight: bold;
+    }
+    .reset-btn {
+      margin-top: 10px;
+      background-color: #f44336;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      width: 100%;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>To-Do List</h2>
+    <h2>📝 To-Do List</h2>
 
     <div class="user-auth">
       <input type="text" id="username" placeholder="Enter username">
@@ -87,7 +121,7 @@
 
     <div class="task-input">
       <input type="text" id="newTask" placeholder="Enter a new task">
-      <button onclick="addTask()">Add</button>
+      <button onclick="addTask()">Add Task</button>
     </div>
 
     <ul id="taskList"></ul>
@@ -97,6 +131,8 @@
         <div class="progress-fill" id="progressFill">0%</div>
       </div>
     </div>
+
+    <button class="reset-btn" onclick="resetList()">Reset Task List</button>
   </div>
 
   <script>
@@ -157,6 +193,14 @@
       renderTasks();
     }
 
+    function resetList() {
+      if (!currentUser) return alert('Please login first.');
+      if (!confirm('Are you sure you want to clear all your tasks?')) return;
+      tasks = [];
+      saveUserData();
+      renderTasks();
+    }
+
     function renderTasks() {
       const taskList = document.getElementById('taskList');
       taskList.innerHTML = '';
@@ -201,3 +245,4 @@
   </script>
 </body>
 </html>
+
