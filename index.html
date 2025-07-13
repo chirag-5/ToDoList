@@ -1,247 +1,249 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>To-Do List with User Login</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>To-Do List</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 30px;
-      background: #f0f2f5;
-      color: #333;
-    }
-    .container {
-      max-width: 600px;
-      margin: auto;
-      background: #ffffff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-    h2 {
-      text-align: center;
-      color: #3f51b5;
-      font-weight: bold;
-    }
-    .task-input, .user-auth {
+      font-family: 'Roboto', sans-serif;
+      background: #f1f3f6;
+      margin: 0;
+      padding: 0;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .header {
+      text-align: center;
       margin-bottom: 20px;
     }
-    .task-input input, .user-auth input {
-      flex: 1;
+
+    .header h2 {
+      color: #3f51b5;
+      margin: 0;
+    }
+
+    .header div {
+      font-size: 36px;
+    }
+
+    .user-auth {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+      width: 100%;
+    }
+
+    .user-auth input {
+      flex: 1 1 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    .user-auth button {
+      flex: 1 1 48%;
+      padding: 12px;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      box-sizing: border-box;
+    }
+
+    .user-auth .register {
+      background: #2196f3;
+    }
+
+    .user-auth .login {
+      background: #673ab7;
+    }
+
+    .task-section {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .task-section input {
+      flex: 1 1 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    .task-section button {
+      flex: 1 1 100%;
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 8px;
       padding: 12px;
       font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    .task-input button {
-      background-color: #4caf50;
-      color: white;
-      border: none;
-      border-radius: 6px;
-    }
-    .user-auth button:nth-child(2) {
-      background-color: #2196f3;
-      color: white;
-      border: none;
-      border-radius: 6px;
-    }
-    .user-auth button:nth-child(3) {
-      background-color: #673ab7;
-      color: white;
-      border: none;
-      border-radius: 6px;
-    }
-    button {
-      padding: 10px 15px;
-      font-size: 16px;
-      margin-left: 10px;
       cursor: pointer;
+      box-sizing: border-box;
     }
-    ul {
-      list-style-type: none;
-      padding: 0;
-    }
-    li {
-      padding: 10px;
-      background: #f9f9f9;
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      border-left: 5px solid #2196f3;
-      border-radius: 5px;
-    }
-    li.completed {
-      text-decoration: line-through;
-      background-color: #c8e6c9;
-      border-left-color: #4caf50;
-    }
-    .checkbox {
-      margin-right: 10px;
-    }
-    .progress-container {
-      margin-top: 20px;
-    }
+
     .progress-bar {
-      height: 25px;
-      background: #ddd;
+      background: #e0e0e0;
       border-radius: 20px;
+      height: 24px;
+      margin-bottom: 20px;
       overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%;
-      width: 0;
-      background: #4caf50;
-      text-align: center;
-      line-height: 25px;
+      font-size: 14px;
+      line-height: 24px;
       color: white;
-      font-weight: bold;
+      text-align: center;
     }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: #3f51b5;
+      width: 0%;
+      transition: width 0.3s ease-in-out;
+    }
+
     .reset-btn {
-      margin-top: 10px;
-      background-color: #f44336;
+      width: 100%;
+      background: #f44336;
       color: white;
       border: none;
-      border-radius: 6px;
-      width: 100%;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 16px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>📝 To-Do List</h2>
+    <div class="header">
+      <div>📝</div>
+      <h2>To-Do List</h2>
+    </div>
 
     <div class="user-auth">
-      <input type="text" id="username" placeholder="Enter username">
-      <button onclick="registerUser()">Register</button>
-      <button onclick="loginUser()">Login</button>
+      <input type="text" placeholder="Enter username" id="username"/>
+      <button class="register">Register</button>
+      <button class="login">Login</button>
     </div>
 
-    <div class="task-input">
-      <input type="text" id="newTask" placeholder="Enter a new task">
-      <button onclick="addTask()">Add Task</button>
+    <div class="task-section">
+      <input type="text" placeholder="Enter a new task" id="taskInput"/>
+      <button class="add-task">Add Task</button>
     </div>
 
-    <ul id="taskList"></ul>
-
-    <div class="progress-container">
-      <div class="progress-bar">
-        <div class="progress-fill" id="progressFill">0%</div>
-      </div>
+    <div class="progress-bar">
+      <div class="progress-bar-fill" id="progress-fill">0%</div>
     </div>
 
-    <button class="reset-btn" onclick="resetList()">Reset Task List</button>
+    <button class="reset-btn">Reset Task List</button>
   </div>
 
+  <!-- Connect to Google Apps Script backend -->
   <script>
-    let tasks = [];
-    let currentUser = null;
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxXuzlglOBPTrIQ0QdqPhnnKkqHbNtfEtnpFsG5b4o1fOwYBV6ixlXKrROyRUCZYu1S/exec";
 
-    function registerUser() {
-      const username = document.getElementById('username').value.trim();
-      if (!username) return alert('Please enter a username to register.');
-
-      if (!localStorage.getItem('users')) {
-        localStorage.setItem('users', JSON.stringify({}));
-      }
-
-      const users = JSON.parse(localStorage.getItem('users'));
-
-      if (users[username]) {
-        alert('Username already exists. Try logging in.');
-        return;
-      }
-
-      users[username] = [];
-      localStorage.setItem('users', JSON.stringify(users));
-      alert('User registered successfully! Now login.');
+    function registerUser(username) {
+      fetch(scriptURL, {
+        method: 'POST',
+        body: new URLSearchParams({
+          action: 'register',
+          username: username
+        })
+      })
+      .then(res => res.text())
+      .then(alert)
+      .catch(console.error);
     }
 
-    function loginUser() {
-      const username = document.getElementById('username').value.trim();
-      if (!username) return alert('Please enter a username to login.');
-
-      const users = JSON.parse(localStorage.getItem('users') || '{}');
-
-      if (!users[username]) {
-        alert('User not found. Please register first.');
-        return;
-      }
-
-      currentUser = username;
-      tasks = users[username];
-      renderTasks();
+    function addTask(username, task) {
+      fetch(scriptURL, {
+        method: 'POST',
+        body: new URLSearchParams({
+          action: 'addTask',
+          username: username,
+          task: task
+        })
+      })
+      .then(res => res.text())
+      .then(alert)
+      .catch(console.error);
     }
 
-    function addTask() {
-      if (!currentUser) return alert('Please login to add tasks.');
-
-      const taskText = document.getElementById('newTask').value.trim();
-      if (taskText === '') return;
-
-      tasks.push({ text: taskText, completed: false });
-      document.getElementById('newTask').value = '';
-      saveUserData();
-      renderTasks();
+    function loadTasks(username) {
+      fetch(`${scriptURL}?action=getTasks&username=${encodeURIComponent(username)}`)
+        .then(response => response.json())
+        .then(tasks => {
+          alert(`Loaded ${tasks.length} tasks for ${username}`);
+          updateProgress(tasks.length);
+        });
     }
 
-    function toggleTask(index) {
-      tasks[index].completed = !tasks[index].completed;
-      saveUserData();
-      renderTasks();
+    function resetTasks(username) {
+      fetch(scriptURL, {
+        method: 'POST',
+        body: new URLSearchParams({
+          action: 'resetTasks',
+          username: username
+        })
+      })
+      .then(res => res.text())
+      .then(response => {
+        alert(response);
+        updateProgress(0);
+      })
+      .catch(console.error);
     }
 
-    function resetList() {
-      if (!currentUser) return alert('Please login first.');
-      if (!confirm('Are you sure you want to clear all your tasks?')) return;
-      tasks = [];
-      saveUserData();
-      renderTasks();
+    function updateProgress(taskCount) {
+      const fill = document.getElementById("progress-fill");
+      const percentage = taskCount * 10; // assume 10 tasks = 100%
+      fill.style.width = `${percentage}%`;
+      fill.textContent = `${percentage}%`;
     }
 
-    function renderTasks() {
-      const taskList = document.getElementById('taskList');
-      taskList.innerHTML = '';
+    // Button bindings
+    document.querySelector('.register').onclick = () => {
+      const username = document.getElementById("username").value.trim();
+      if (username) registerUser(username);
+    };
 
-      tasks.forEach((task, index) => {
-        const li = document.createElement('li');
-        li.className = task.completed ? 'completed' : '';
+    document.querySelector('.login').onclick = () => {
+      const username = document.getElementById("username").value.trim();
+      if (username) loadTasks(username);
+    };
 
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.className = 'checkbox';
-        checkbox.checked = task.completed;
-        checkbox.onclick = () => toggleTask(index);
+    document.querySelector('.add-task').onclick = () => {
+      const username = document.getElementById("username").value.trim();
+      const task = document.getElementById("taskInput").value.trim();
+      if (username && task) addTask(username, task);
+    };
 
-        const tick = document.createElement('span');
-        tick.innerHTML = task.completed ? '✅' : '';
-        tick.style.marginLeft = 'auto';
-
-        li.appendChild(checkbox);
-        li.appendChild(document.createTextNode(task.text));
-        li.appendChild(tick);
-        taskList.appendChild(li);
-      });
-
-      updateProgress();
-    }
-
-    function updateProgress() {
-      const total = tasks.length;
-      const completed = tasks.filter(t => t.completed).length;
-      const percentage = total === 0 ? 0 : Math.round((completed / total) * 100);
-      const progressFill = document.getElementById('progressFill');
-      progressFill.style.width = percentage + '%';
-      progressFill.innerText = percentage + '%';
-    }
-
-    function saveUserData() {
-      const users = JSON.parse(localStorage.getItem('users'));
-      users[currentUser] = tasks;
-      localStorage.setItem('users', JSON.stringify(users));
-    }
+    document.querySelector('.reset-btn').onclick = () => {
+      const username = document.getElementById("username").value.trim();
+      if (username) resetTasks(username);
+    };
   </script>
 </body>
 </html>
